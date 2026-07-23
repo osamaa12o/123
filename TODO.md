@@ -1,7 +1,7 @@
 # MongoDB Migration - TODO
 
 ## Step 1: Environment setup
-- [ ] Create `.env` in project root with `MONGODB_URI` and `MONGODB_DB` (and any other required vars).
+- [ ] Create `.env` in project root with `'legacy_mongo_removed'` and `MONGODB_DB` (and any other required vars).
 - [ ] Ensure code reads all config only from `.env`.
 
 ## Step 2: MongoDB data layer
