@@ -14,6 +14,11 @@ export async function readCollection<T extends AnyDoc>(collection: string): Prom
   return (data || []) as T[];
 }
 
+// Added readOne to fix build errors in auth.ts and serverProducts.ts
+export async function readOne<T extends AnyDoc>(collection: string, query: Record<string, any>): Promise<T | null> {
+  return findOneBy<T>(collection, query);
+}
+
 export async function writeCollection<T extends AnyDoc>(collection: string, items: T[]): Promise<void> {
   const { error } = await supabase.from(collection).upsert(items as any);
   if (error) throw error;
@@ -69,7 +74,8 @@ export async function updateOne<T extends { id: string } & AnyDoc>(
   return data as T | null;
 }
 
-export async function deleteOne(
+// Added generic type <T> to deleteOne to fix Admin API type errors
+export async function deleteOne<T = any>(
   collection: string,
   id: string
 ): Promise<boolean> {
