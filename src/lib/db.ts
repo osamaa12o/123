@@ -14,9 +14,14 @@ export async function readCollection<T extends AnyDoc>(collection: string): Prom
   return (data || []) as T[];
 }
 
-// Added readOne to fix build errors in auth.ts and serverProducts.ts
-export async function readOne<T extends AnyDoc>(collection: string, query: Record<string, any>): Promise<T | null> {
-  return findOneBy<T>(collection, query);
+/**
+ * Flexible readOne: supports either a query object or a direct string ID
+ */
+export async function readOne<T extends AnyDoc>(collection: string, queryOrId: Record<string, any> | string): Promise<T | null> {
+  if (typeof queryOrId === 'string') {
+    return findOneBy<T>(collection, { id: queryOrId });
+  }
+  return findOneBy<T>(collection, queryOrId);
 }
 
 export async function writeCollection<T extends AnyDoc>(collection: string, items: T[]): Promise<void> {
@@ -74,7 +79,6 @@ export async function updateOne<T extends { id: string } & AnyDoc>(
   return data as T | null;
 }
 
-// Added generic type <T> to deleteOne to fix Admin API type errors
 export async function deleteOne<T = any>(
   collection: string,
   id: string
